@@ -378,6 +378,24 @@ footer .icon i:hover {
     color: #fff;
 }
 
+ /* Hide "Add to Cart" text and style the icon */
+ .add-to-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.add-to-cart span {
+    font-size: 0; /* Hides the text */
+}
+
+.add-to-cart i {
+    font-size: 24px; /* Adjust the size of the icon */
+    color: #000; /* Change the icon color if needed */
+}
+
 /*Single Product*/
 #prodetails{
     display: flex;
@@ -489,6 +507,27 @@ button.normal{
     width: 100px;
     text-align: center;
 }
+#cart table td:nth-child(1) a {
+    color: red; /* Red icon color */
+    background-color: transparent; /* Transparent background */
+    border: 2px solid red; /* Red border */
+    border-radius: 50%;
+    padding: 5px;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    text-decoration: none; /* Remove underline from the link */
+}
+
+/* Hover effect */
+#cart table td:nth-child(1) a:hover {
+    background-color: red; /* Solid red background on hover */
+    color: white; /* White icon color on hover */
+    cursor: pointer;
+}
+
 #cart table td:nth-child(2){
     width: 150px;
     text-align: center;
@@ -536,6 +575,8 @@ button.normal{
     justify-content: space-between;
 }
 
+
+
 #coupon{
     width: 50%;
     margin-bottom: 30px;
@@ -579,4 +620,56 @@ button.normal{
     border: 1px solid #e2e9e1;
     padding: 10px;
     font-size: 13px;
+}
+
+/*Checkout Page*/
+ /* Basic responsive styles */
+ body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#checkout-form {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+#checkout-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-group input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.form-group input[type="submit"]:hover {
+    background-color: #0056b3;
 }
