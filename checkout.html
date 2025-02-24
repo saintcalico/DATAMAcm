@@ -7,7 +7,7 @@
     <title>HP WOLVES DEN - Checkout</title>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" href="style.css">
-   
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
     <section id="header">
@@ -26,7 +26,6 @@
     <section id="checkout-form">
         <h2>Checkout</h2>
         <form id="checkoutForm">
-            <!-- Personal Information -->
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName" required>
@@ -43,8 +42,6 @@
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
-
-            <!-- Address Information -->
             <div class="form-group">
                 <label for="address">Address</label>
                 <input type="text" id="address" name="address" required>
@@ -57,8 +54,6 @@
                 <label for="zipcode">Zip Code</label>
                 <input type="text" id="zipcode" name="zipcode" required>
             </div>
-
-            <!-- Payment Information -->
             <div class="form-group">
                 <label for="paymentAmount">Payment Amount (₱)</label>
                 <input type="number" id="paymentAmount" name="paymentAmount" readonly>
@@ -70,8 +65,6 @@
                     <option value="card">Card</option>
                 </select>
             </div>
-
-            <!-- Delivery Fee and Status -->
             <div class="form-group">
                 <label for="deliveryFee">Delivery Fee (₱)</label>
                 <input type="text" id="deliveryFee" name="deliveryFee" value="100" readonly>
@@ -80,85 +73,59 @@
                 <label for="deliveryStatus">Delivery Status</label>
                 <input type="text" id="deliveryStatus" name="deliveryStatus" value="Pending" readonly>
             </div>
-
-            <!-- Submit Button -->
             <div class="form-group">
                 <input type="submit" value="Place Order">
             </div>
         </form>
     </section>
 
-    <footer class="section-p1">
-        <div class="footer-container">
-            <div class="col">
-                <img src="IMAGES/logo.png" alt="Logo">
-            </div>
-            <div class="col">
-                <h4>Contact</h4>
-                <p><strong>Address:</strong> Bel Air 1209 Makati, Philippines</p>
-                <p><strong>Phone:</strong> 0998 597 0704</p>
-                <p><strong>Email:</strong> wolvesden701@gmail.com</p>
-                <p><strong>Hours:</strong> 10:00 - 20:00, Mon - Sat</p>
-            </div>
-            <div class="col">
-                <h4>Follow Us</h4>
-                <div class="icon">
-                    <a href="https://www.facebook.com/profile.php?id=61553732901127" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://www.instagram.com/wolvesdenarmory" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // Load cart total from localStorage
-        document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Supabase
+        const SUPABASE_URL = "https://kxoexwdhzcxmxzygwatq.supabase.co";  // Replace with your actual Supabase URL
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b2V4d2RoemN4bXh6eWd3YXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3MDk4MjAsImV4cCI6MjA1NTI4NTgyMH0.wXpVEFOOHHReYwJj6cDltmjy3Ff5MXG75lFhA_8xS78"; // Replace with your actual Supabase anon key
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        document.addEventListener('DOMContentLoaded', async () => {
             const storedCart = localStorage.getItem('cart');
             if (storedCart) {
                 const cart = JSON.parse(storedCart);
                 let total = 0;
-
-                cart.forEach(item => {
-                    total += item.price * item.quantity;
-                });
-
-                // Add delivery fee
-                total += 100;
-
-                // Populate payment amount field
+                cart.forEach(item => total += item.price * item.quantity);
+                total += 100; // Add delivery fee
                 document.getElementById('paymentAmount').value = total;
             }
         });
 
-        // Handle form submission
-        document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+        document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
             // Gather form data
             const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                contactNum: document.getElementById('contactNum').value,
+                first_name: document.getElementById('firstName').value,
+                last_name: document.getElementById('lastName').value,
+                contact_number: document.getElementById('contactNum').value,
                 email: document.getElementById('email').value,
                 address: document.getElementById('address').value,
                 street: document.getElementById('street').value,
                 zipcode: document.getElementById('zipcode').value,
-                paymentAmount: document.getElementById('paymentAmount').value,
-                paymentType: document.getElementById('paymentType').value,
-                deliveryFee: document.getElementById('deliveryFee').value,
-                deliveryStatus: document.getElementById('deliveryStatus').value,
+                payment_amount: parseFloat(document.getElementById('paymentAmount').value),
+                payment_type: document.getElementById('paymentType').value,
+                delivery_fee: parseFloat(document.getElementById('deliveryFee').value),
+                delivery_status: document.getElementById('deliveryStatus').value,
             };
 
-            // Save order details to localStorage (optional)
-            localStorage.setItem('orderDetails', JSON.stringify(formData));
+            try {
+                // Insert data into Supabase
+                const { data, error } = await supabase.from('checkout').insert([formData]);
 
-            // Show confirmation message
-            alert(`Thank you, ${formData.firstName}! Your order has been placed successfully.`);
-            window.location.href = 'index.html'; // Redirect to homepage
+                if (error) throw error;
+
+                alert(`Thank you, ${formData.first_name}! Your order has been placed successfully.`);
+                localStorage.removeItem('cart'); // Clear cart after order placement
+                window.location.href = 'index.html'; // Redirect to homepage
+            } catch (error) {
+                alert("Error placing order: " + error.message);
+            }
         });
     </script>
 </body>
