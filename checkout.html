@@ -114,6 +114,8 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="supabaseclient.js"></script>
     <script>
         // Load cart total from localStorage
         document.addEventListener('DOMContentLoaded', () => {
@@ -135,31 +137,24 @@
         });
 
         // Handle form submission
-        document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+        document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Gather form data
-            const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                contactNum: document.getElementById('contactNum').value,
-                email: document.getElementById('email').value,
-                address: document.getElementById('address').value,
-                street: document.getElementById('street').value,
-                zipcode: document.getElementById('zipcode').value,
-                paymentAmount: document.getElementById('paymentAmount').value,
-                paymentType: document.getElementById('paymentType').value,
-                deliveryFee: document.getElementById('deliveryFee').value,
-                deliveryStatus: document.getElementById('deliveryStatus').value,
-            };
+    // Gather form data
+    const formData = {
+        first_name: document.getElementById('firstName').value,
+    };
+    const { data, error } = await supabase.from('orders').insert([formData]);
 
-            // Save order details to localStorage (optional)
-            localStorage.setItem('orderDetails', JSON.stringify(formData));
-
-            // Show confirmation message
-            alert(`Thank you, ${formData.firstName}! Your order has been placed successfully.`);
-            window.location.href = 'index.html'; // Redirect to homepage
-        });
+        if (error) {
+            console.error('Error saving order:', error);
+            alert('Error processing your order. Please try again.');
+        } else {
+            alert('Order placed successfully!');
+            localStorage.removeItem('cart'); // Clear cart after checkout
+            window.location.href = 'shop.html'; // Redirect if needed
+        }
+});
     </script>
 </body>
 </html>
