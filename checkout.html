@@ -149,10 +149,14 @@ document.getElementById('checkoutForm').addEventListener('submit', async (e) => 
     lastName: document.getElementById('lastName').value,
   };
 
+  console.log('Form Data:', formData); // Check the form data
+
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('orders')
       .insert([formData]);
+
+    console.log('Supabase Response:', data, error); // Check the Supabase response
 
     if (error) {
       console.error('Error inserting data:', error);
