@@ -130,3 +130,28 @@ async function storeCartInSupabase() {
     }
 }
 
+document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    // Gather form data (you already have this part)
+    const formData = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      // ... other form fields
+    };
+  
+    // Insert data into Supabase
+    const { error } = await supabase
+      .from('orders') // Replace 'orders' with your actual table name
+      .insert([formData]); // Insert the formData object
+  
+    if (error) {
+      console.error('Error inserting data:', error);
+      // Handle error (e.g., display an error message to the user)
+    } else {
+      // Show confirmation message (you already have this part)
+      alert(`Thank you, ${formData.firstName}! Your order has been placed successfully.`);
+      window.location.href = 'index.html'; // Redirect to homepage
+    }
+  });
+
