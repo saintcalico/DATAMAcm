@@ -106,10 +106,3 @@ function loadPaymentAmount() {
     document.getElementById('paymentAmount').value = (cartSubtotal + 100).toFixed(2);
 }
 
-async function getData() {
-    let { data, error } = await supabase
-        .from('orders')
-        .select('*');
-    console.log(data, error);
-}
-getData();
