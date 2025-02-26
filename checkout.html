@@ -69,7 +69,7 @@
             
 
             const { data, error } = await supabase
-                .from('orders') // Replace with your actual table name
+                .from('orders') 
                 .insert([{ firstname: firstName, lastname: lastName }]);
 
             if (error) {
