@@ -7,7 +7,7 @@
     <title>HP WOLVES DEN - Checkout</title>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" href="style.css">
-   
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <section id="header">
@@ -26,7 +26,6 @@
     <section id="checkout-form">
         <h2>Checkout</h2>
         <form id="checkoutForm">
-            <!-- Personal Information -->
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName" required>
@@ -36,57 +35,52 @@
                 <input type="text" id="lastName" name="lastName" required>
             </div>
             <div class="form-group">
-                <label for="contactNum">Contact Number</label>
-                <input type="tel" id="contactNum" name="contactNum" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-
-            <!-- Address Information -->
-            <div class="form-group">
-                <label for="address">Address</label>
-                <input type="text" id="address" name="address" required>
-            </div>
-            <div class="form-group">
-                <label for="street">Street</label>
-                <input type="text" id="street" name="street" required>
-            </div>
-            <div class="form-group">
-                <label for="zipcode">Zip Code</label>
-                <input type="text" id="zipcode" name="zipcode" required>
-            </div>
-
-            <!-- Payment Information -->
-            <div class="form-group">
-                <label for="paymentAmount">Payment Amount (₱)</label>
-                <input type="number" id="paymentAmount" name="paymentAmount" readonly>
-            </div>
-            <div class="form-group">
-                <label for="paymentType">Payment Type</label>
-                <select id="paymentType" name="paymentType" required>
-                    <option value="e-wallet">E-Wallet</option>
-                    <option value="card">Card</option>
-                </select>
-            </div>
-
-            <!-- Delivery Fee and Status -->
-            <div class="form-group">
-                <label for="deliveryFee">Delivery Fee (₱)</label>
-                <input type="text" id="deliveryFee" name="deliveryFee" value="100" readonly>
-            </div>
-            <div class="form-group">
-                <label for="deliveryStatus">Delivery Status</label>
-                <input type="text" id="deliveryStatus" name="deliveryStatus" value="Pending" readonly>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="form-group">
                 <input type="submit" value="Place Order">
             </div>
         </form>
     </section>
+
+    <script>
+        // Load cart total from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedCart = localStorage.getItem('cart');
+            if (storedCart) {
+                const cart = JSON.parse(storedCart);
+                let total = 0;
+
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                });
+
+                total += 100; // Add delivery fee
+                document.getElementById('paymentAmount').value = total;
+            }
+        });
+
+        const SUPABASE_URL = 'https://kxoexwdhzcxmxzygwatq.supabase.co'; // Replace with your Supabase URL
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b2V4d2RoemN4bXh6eWd3YXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3MDk4MjAsImV4cCI6MjA1NTI4NTgyMH0.wXpVEFOOHHReYwJj6cDltmjy3Ff5MXG75lFhA_8xS78'; // Replace with your Supabase anon key
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+
+            const { data, error } = await supabase
+                .from('orders') // Replace with your actual table name
+                .insert([{ first_name: firstName, last_name: lastName }]);
+
+            if (error) {
+                console.error('Error inserting data:', error);
+                alert('An error occurred while placing your order. Please try again.');
+            } else {
+                console.log('Data inserted successfully:', data);
+                alert(`Thank you, ${firstName}! Your order has been placed successfully.`);
+                window.location.href = 'index.html'; // Redirect to homepage
+            }
+        });
+    </script>
 
     <footer class="section-p1">
         <div class="footer-container">
@@ -113,53 +107,5 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Load cart total from localStorage
-        document.addEventListener('DOMContentLoaded', () => {
-            const storedCart = localStorage.getItem('cart');
-            if (storedCart) {
-                const cart = JSON.parse(storedCart);
-                let total = 0;
-
-                cart.forEach(item => {
-                    total += item.price * item.quantity;
-                });
-
-                // Add delivery fee
-                total += 100;
-
-                // Populate payment amount field
-                document.getElementById('paymentAmount').value = total;
-            }
-        });
-
-        // Handle form submission
-        document.getElementById('checkoutForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // Gather form data
-            const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                contactNum: document.getElementById('contactNum').value,
-                email: document.getElementById('email').value,
-                address: document.getElementById('address').value,
-                street: document.getElementById('street').value,
-                zipcode: document.getElementById('zipcode').value,
-                paymentAmount: document.getElementById('paymentAmount').value,
-                paymentType: document.getElementById('paymentType').value,
-                deliveryFee: document.getElementById('deliveryFee').value,
-                deliveryStatus: document.getElementById('deliveryStatus').value,
-            };
-
-            // Save order details to localStorage (optional)
-            localStorage.setItem('orderDetails', JSON.stringify(formData));
-
-            // Show confirmation message
-            alert(`Thank you, ${formData.firstName}! Your order has been placed successfully.`);
-            window.location.href = 'index.html'; // Redirect to homepage
-        });
-    </script>
 </body>
 </html>
