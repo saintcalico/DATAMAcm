@@ -99,4 +99,3 @@ function loadPaymentAmount() {
     let cartSubtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     document.getElementById('paymentAmount').value = (cartSubtotal + 100).toFixed(2);
 }
-
