@@ -1,10 +1,4 @@
 // Navbar Toggle Functionality
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://kxoexwdhzcxmxzygwatq.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b2V4d2RoemN4bXh6eWd3YXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3MDk4MjAsImV4cCI6MjA1NTI4NTgyMH0.wXpVEFOOHHReYwJj6cDltmjy3Ff5MXG75lFhA_8xS78'; // Use the appropriate key
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 const bar = document.getElementById('bar');
 const close = document.getElementById('close');
 const nav = document.getElementById('navbar');
