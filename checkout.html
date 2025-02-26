@@ -66,10 +66,11 @@
 
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
+            
 
             const { data, error } = await supabase
                 .from('orders') // Replace with your actual table name
-                .insert([{ first_name: firstName, last_name: lastName }]);
+                .insert([{ firstname: firstName, lastname: lastName }]);
 
             if (error) {
                 console.error('Error inserting data:', error);
