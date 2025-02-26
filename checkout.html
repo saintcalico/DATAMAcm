@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HP WOLVES DEN - Checkout</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  </head>
 <body>
     <button id="testInsert">Insert Test Data</button>
 
     <script>
+        // Your Supabase initialization and code should be placed here
         const SUPABASE_URL = 'https://kxoexwdhzcxmxzygwatq.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b2V4d2RoemN4bXh6eWd3YXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3MDk4MjAsImV4cCI6MjA1NTI4NTgyMH0.wXpVEFOOHHReYwJj6cDltmjy3Ff5MXG75lFhA_8xS78';
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -18,7 +18,7 @@
         document.getElementById('testInsert').addEventListener('click', async () => {
             const { data, error } = await supabase
                 .from('orders')
-                .insert([{ firstname: 'Test', lastname: 'User' }]);
+                .insert([{ first_name: 'Test', last_name: 'User' }]);
 
             if (error) {
                 console.error('Error:', error);
