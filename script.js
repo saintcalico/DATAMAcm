@@ -104,32 +104,7 @@ const SUPABASE_URL = "https://kxoexwdhzcxmxzygwatq.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b2V4d2RoemN4bXh6eWd3YXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3MDk4MjAsImV4cCI6MjA1NTI4NTgyMH0.wXpVEFOOHHReYwJj6cDltmjy3Ff5MXG75lFhA_8xS78";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-async function storeCartInSupabase() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-    }
-
-    try {
-        // Insert cart items into Supabase
-        const { data, error } = await supabase.from('cart_items').insert(cart);
-
-        if (error) {
-            console.error("Error saving to Supabase:", error);
-            alert("Failed to save cart. Please try again.");
-        } else {
-            console.log("Cart saved successfully:", data);
-            alert("Cart saved! Proceeding to checkout.");
-            window.location.href = 'checkout.html'; // Redirect after saving
-        }
-    } catch (err) {
-        console.error("Unexpected error:", err);
-        alert("Something went wrong.");
-    }
-}
-
+//checkout trial
 document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
     e.preventDefault();
   
