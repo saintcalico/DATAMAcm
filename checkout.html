@@ -135,31 +135,37 @@
             }
         });
 
-        // Handle form submission
-        document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-  
-    // Gather form data (you already have this part)
-    const formData = {
-      firstName: document.getElementById('firstName').value,
-      lastName: document.getElementById('lastName').value,
-      // ... other form fields
-    };
-  
-    // Insert data into Supabase
+        import { createClient } from '@supabase/supabase-js'; // Import createClient
+
+const SUPABASE_URL = "https://kxoexwdhzcxmxzygwatq.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt4b2V4d2RoemN4bXh6eWd3YXRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk3MDk4MjAsImV4cCI6MjA1NTI4NTgyMH0.wXpVEFOOHHReYwJj6cDltmjy3Ff5MXG75lFhA_8xS78";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // Now supabase is defined
+
+document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const formData = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+  };
+
+  try {
     const { error } = await supabase
-      .from('orders') // Replace 'orders' with your actual table name
-      .insert([formData]); // Insert the formData object
-  
+      .from('orders')
+      .insert([formData]);
+
     if (error) {
       console.error('Error inserting data:', error);
-      // Handle error (e.g., display an error message to the user)
+      alert('Error inserting data. Check console.');
     } else {
-      // Show confirmation message (you already have this part)
-      alert(`Thank you, ${formData.firstName}! Your order has been placed successfully.`);
-      window.location.href = 'index.html'; // Redirect to homepage
+      alert('Data inserted successfully!');
+      window.location.href = 'index.html';
     }
-  });
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    alert('Unexpected error. Check console.');
+  }
+});
     </script>
 </body>
 </html>
